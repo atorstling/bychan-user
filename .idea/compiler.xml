@@ -25,5 +25,8 @@
         <module name="bychan-user" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="bychan-user" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
