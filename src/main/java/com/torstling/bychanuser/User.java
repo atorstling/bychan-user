@@ -8,13 +8,13 @@ public class User {
     private final Language<Integer> l;
 
     public User() {
-        l = new LanguageBuilder<Integer>().named("plus")
-                .newToken().named("number").matchesPattern("[0-9]+").prefixParseAs((integer, lexingMatch, userParserCallback) -> Integer.parseInt(lexingMatch.getText()))
-                .newToken().named("plus").matchesString("+").infixParseAs((integer, lexingMatch, userParserCallback) -> integer + userParserCallback.subExpression())
-                .completeLanguage();
+        LanguageBuilder<Integer> lb = new LanguageBuilder<>("plus");
+        lb.newToken().named("number").matchesPattern("[0-9]+").nud((previous, parser, lexeme) -> Integer.parseInt(lexeme.getText())).build();
+        lb.newToken().named("plus").matchesString("+").led((previous, parser, lexeme) -> previous + parser.expression(previous)).build();
+        l = lb.completeLanguage();
     }
 
     public Integer calculate(final String s) {
-        return l.getLexParser().parse(s);
+        return l.newLexParser().parse(s);
     }
 }
